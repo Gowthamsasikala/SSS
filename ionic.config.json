@@ -1,0 +1,7 @@
+{
+  "name": "SSS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
