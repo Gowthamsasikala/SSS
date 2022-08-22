@@ -1,0 +1,74 @@
+<ion-content>
+  <ion-header style="top: 8% !important;position: relative;">
+    <div class="dashboardTitle">
+      <ion-buttons slot="start" (click)="previous()">
+        <ion-icon name="arrow-back" style="left: 15px;position: relative;"></ion-icon>
+        <ion-title class="ion-text-center" color="darkash">REPORT</ion-title>
+      </ion-buttons>
+    </div>
+  </ion-header>
+  <div class="marginTop">
+    <ion-item>
+      <ion-label color="darkash" position="fixed" style="font-weight: 700;">Select Date<span style="color: red">*</span>
+      </ion-label>
+      <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+    </ion-item>
+  
+      <ion-item>
+            <ion-label color="darkash"  style="font-weight: 700;">Selected
+              Date </ion-label>
+            <ion-label color="darkash"  style="font-weight: 700;text-align: center;">{{selectedName}}</ion-label>
+      </ion-item>
+
+    <div *ngIf="showPicker == true">
+      <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+          <ion-button color="darkash" expand="block" (click)="fetchRecord();">Fetch Record</ion-button>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+      <ion-segment-button value="table">
+        <ion-label>Table view</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="chart">
+        <ion-label>Chart View</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div style="margin-top: 10%;" *ngIf="responseArray && responseArray.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of responseArray; let i = index">
+            <td>{{data.itemName}}</td>
+            <td>{{data.itemQuantity}}</td>
+            <td>{{data.itemTotalAmt}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="responseArray && responseArray.length > 0">
+        <ion-header style="height: 60px;margin-top: 5%;">
+          <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+            {{this.subTotals}}</ion-title>
+        </ion-header>
+      </div>
+
+    </div>
+
+    
+
+  </div>
+</ion-content>

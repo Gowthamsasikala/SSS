@@ -1,18 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
+    { title: 'Home', url: '/folder/dashboard', icon: 'home' },
+    { title: 'Billing', url: '/folder/billing', icon: 'document' },
+    { title: 'Add Menu', url: '/folder/adding-menu', icon: 'grid' },
+    { title: 'Report', url: '/folder/report', icon: 'copy' },
+    { title: 'Expense', url: '/folder/daily-expense', icon: 'cash' },
+    { title: 'Login', url: '/folder/login', icon: 'person' },
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  currentLoggedInUser: any;
+  constructor(private router: Router) { }
+  ngOnInit(): void {
+    const type = localStorage.getItem('loginType');
+    console.log(type);
+    if (type == null) {
+      this.currentLoggedInUser.emailId = ''; 
+    } else {
+      this.currentLoggedInUser = JSON.parse(localStorage.getItem('userInfo'));
+    }
+  }
 }

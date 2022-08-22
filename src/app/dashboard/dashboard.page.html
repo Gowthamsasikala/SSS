@@ -1,0 +1,240 @@
+<ion-content>
+  <ion-header style="top: 8% !important;">
+    <div class="dashboardTitle">
+      <ion-title class="ion-text-center" color="darkash">Dashboard</ion-title>
+    </div>
+  </ion-header>
+  <div class="marginTop">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/authorization.png" (click)="routing('login')" alt="login"
+                class="iconNewStyle">
+
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 class="newTxtStle" (click)="routing('login')">Login</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/cash-machine.png" (click)="routing('billing')" alt="billing"
+                class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 (click)="routing('billing')" class="newTxtStle">Billing</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/expenses.png" (click)="routing('daily-expense')" alt="daily-expense"
+                class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 (click)="routing('daily-expense')" class="newTxtStle">Expense</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="marginTop">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/salary.png" alt="Salary" class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 class="newTxtStle">Salary</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/profit.png" (click)="routing('sale-and-profit')"
+                alt="sale-and-profit" class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 class="newTxtStle" (click)="routing('sale-and-profit')">Daily Sales/Profit</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/suitcase.png" (click)="routing('monthly-expense')"
+                alt="monthly-expense" class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 class="newTxtStle" (click)="routing('monthly-expense')">Monthly Expense</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="marginTop">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4">
+          <div class="box" id="open-modal">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/qr-code.png" alt="qr code" class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2  class="newTxtStle">Payment's</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/report.png" (click)="routing('report')" alt="report"
+                class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 (click)="routing('report')" class="newTxtStle">Report</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="box">
+            <div class="centerStyling">
+              <img src="../../assets/images/dashboard/add.png" (click)="routing('adding-menu')" alt="adding-menu"
+                class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 (click)="routing('adding-menu')" class="newTxtStle">Adding Menu</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+
+  </div>
+
+
+  <div class="marginTop ion-page">
+
+  </div>
+
+
+  <div class="marginTop">
+    <ion-header style="top: 8% !important;">
+      <div class="dashboardTitle">
+        <ion-title class="ion-text-center" color="darkash">My Expense</ion-title>
+      </div>
+    </ion-header>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4"></ion-col>
+        <ion-col size="4">
+          <div class="boxs">
+            <div class="centerStyling">
+              <img src="../../assets/images/expenses.png" (click)="routing('myexpense')" alt="expense"
+                class="iconNewStyle">
+            </div>
+            <div class="centerText">
+              <ion-label>
+                <h2 class="newTxtStle" (click)="routing('myexpense')">My Expense</h2>
+              </ion-label>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="4"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss" [presentingElement]="presentingElement">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="darkash">
+          <ion-title>QR Scanner Code</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="modal.dismiss()">Done</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <p class="ion-padding-horizontal">Scan the QR scanner for Online payment.</p>
+
+        <ion-accordion-group value="phonePay">
+          <ion-accordion value="phonePay">
+            <ion-item slot="header" color="darkash">
+              <ion-label>Phone Pay </ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12">
+                      <img src="../../assets/images/dashboard/PhonePay.jpeg" alt="PhonePay">
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-accordion>
+
+          <ion-accordion value="paytm">
+            <ion-item slot="header" color="darkash">
+              <ion-label>Paytm</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12">
+                      <img src="../../assets/images/dashboard/payTm.jpeg" alt="paytm">
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-accordion>
+
+          <ion-accordion value="GowthamGpay">
+            <ion-item slot="header" color="darkash">
+              <ion-label>Gowtham G-Pay </ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12">
+                      <img src="../../assets/images/dashboard/GowthamGpay.jpeg" alt="Gpay">
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

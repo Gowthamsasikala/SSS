@@ -1,0 +1,929 @@
+<ion-content>
+  <ion-header color="darkash" style="top: 8% !important;position: relative;" translucent>
+    <div class="dashboardTitle">
+      <ion-buttons slot="start" (click)="previous()">
+        <ion-icon name="arrow-back" style="left: 15px;position: relative;"></ion-icon>
+        <ion-title class="ion-text-center" color="darkash">MONTHLY EXPENSE</ion-title>
+      </ion-buttons>
+    </div>
+  </ion-header>
+  <div class="marginTop">
+    <ion-list *ngIf="defaultPage">
+      <ion-item id="gas" (click)="expenseTab('gas')">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/gasCylinder.webp" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Gas Cylinder</h2>
+          <p>Contains lists of gas which was purchased for the particular month.</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item id="water" (click)="expenseTab('water')">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/watercan.png" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Water Can</h2>
+          <p>Contains lists of Water can which was purchased for the particular month.</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item id="soda" (click)="expenseTab('soda')">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/soda.webp" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Goli Soda</h2>
+          <p>Contains lists of Goli Soda which was purchased for the particular month.</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item id="rice" (click)="expenseTab('rice')" (click)="this.modalName = 'rice'">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/rice.png" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Rice</h2>
+          <p>Provide number of bags contains for the particular month.</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item id="oil" (click)="expenseTab('oil')">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/oil.png" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Oil</h2>
+          <p>Oil for myonise and rice.</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item id="masala" (click)="expenseTab('masala')">
+        <ion-avatar slot="start">
+          <img src="../../assets/images/dashboard/masala.png" />
+        </ion-avatar>
+        <ion-label>
+          <h2>Masala</h2>
+          <p>Masala for monthly.</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-modal trigger="{{modalName}}">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="cancel()">Cancel</ion-button>
+            </ion-buttons>
+            <ion-title class="ion-text-center"> {{selectedOption | uppercase}}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content *ngIf="selectedOption == 'gas'" class="ion-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="1"></ion-col>
+              <ion-col size="5">
+                <ion-button color="darkash" expand="block" (click)="newEntry('new');">New Entry</ion-button>
+              </ion-col>
+              <ion-col size="5">
+                <ion-button color="darkash" expand="block" (click)="newEntry('fetchList');">Fetch List</ion-button>
+              </ion-col>
+              <ion-col size="1"></ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <div *ngIf="newEntryTab">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/gasCylinder.webp" alt="gas cylinder">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+
+            <ion-item>
+                  <ion-label color="darkash" style="font-weight: 700;">Selected
+                    Date </ion-label>
+                  <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+                  </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Gas
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.gas.noOfItems,monthlyExpense.gas.ratePerItem,'gas')"
+                [(ngModel)]="monthlyExpense.gas.noOfItems" placeholder="No of bags">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Gas rate
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.gas.noOfItems,monthlyExpense.gas.ratePerItem,'gas')"
+                [(ngModel)]="monthlyExpense.gas.ratePerItem" placeholder="Gas Per Rate"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.gas.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+
+                <ion-item>
+                  <ion-label color="darkash" style="font-weight: 700;">Usage<span style="color: red">*</span>
+                  </ion-label>
+                  <ion-select (ionChange)="active($event)" slot="end" [(ngModel)]="usageGas" placeholder="Gas Usage">
+                    <ion-select-option value="Rice">Rice</ion-select-option>
+                    <ion-select-option value="Grill">Grill</ion-select-option>
+                    <ion-select-option value="Shawarma">Shawarma</ion-select-option>
+                  </ion-select>
+                </ion-item>
+         
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('gas');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+          <div *ngIf="fetchList">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/gasCylinder.webp" alt="gas cylinder">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+
+            <ion-item>
+                  <ion-label color="darkash" style="font-weight: 700;">Selected
+                    Date </ion-label>
+                  <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+                  </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('gas');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                    <th>Usage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                    <td>{{data.MonthlyExpense.usageFor}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+
+          </div>
+        </ion-content>
+
+        <ion-content *ngIf="selectedOption == 'oil'" class="ion-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+            <ion-segment-button value="newEntryOil">
+              <ion-label>New Entry</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fetchListOil">
+              <ion-label>Fetch List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="segmentValue == 'newEntryOil'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/oil.png" alt="oil box">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Oil Box
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.oil.noOfItems,monthlyExpense.oil.ratePerItem,'oil')"
+                [(ngModel)]="monthlyExpense.oil.noOfItems" placeholder="No of bags">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Rate/Box
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.oil.noOfItems,monthlyExpense.oil.ratePerItem,'oil')"
+                [(ngModel)]="monthlyExpense.oil.ratePerItem" placeholder="Rate per bag">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.oil.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('oil');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div *ngIf="segmentValue == 'fetchListOil'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/oil.png" alt="oil box">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('oil');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.noOfQuantity}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+
+          </div>
+        </ion-content>
+
+        <ion-content *ngIf="selectedOption == 'rice'" class="ion-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+            <ion-segment-button value="newEntryRice">
+              <ion-label>New Entry</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fetchListRice">
+              <ion-label>Fetch List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="segmentValue == 'newEntryRice'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/rice.png" alt="rice bag">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Rice Bags
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.rice.noOfItems,monthlyExpense.rice.ratePerItem,'rice')"
+                [(ngModel)]="monthlyExpense.rice.noOfItems" placeholder="No of bags">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Rate/Bag
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.rice.noOfItems,monthlyExpense.rice.ratePerItem,'rice')"
+                [(ngModel)]="monthlyExpense.rice.ratePerItem" placeholder="Rate per bag">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.rice.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('rice');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div *ngIf="segmentValue == 'fetchListRice'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/rice.png" alt="rice bag">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('rice');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.noOfQuantity}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+
+          </div>
+        </ion-content>
+
+        <ion-content *ngIf="selectedOption == 'soda'" class="ion-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+            <ion-segment-button value="newEntrySoda">
+              <ion-label>New Entry</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fetchListSoda">
+              <ion-label>Fetch List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="segmentValue == 'newEntrySoda'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/soda.webp" alt="Goli soda">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Cases
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.soda.noOfItems,monthlyExpense.soda.ratePerItem,'soda')"
+                [(ngModel)]="monthlyExpense.soda.noOfItems" placeholder="No of case">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Rate/Case
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end"
+                (ionBlur)="calculateTotal(monthlyExpense.soda.noOfItems,monthlyExpense.soda.ratePerItem,'soda')"
+                [(ngModel)]="monthlyExpense.soda.ratePerItem" placeholder="Rate per case">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.soda.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('soda');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div *ngIf="segmentValue == 'fetchListSoda'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/soda.webp" alt="Soda Goli can">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('soda');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.noOfQuantity}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+
+
+          </div>
+        </ion-content>
+
+        <ion-content *ngIf="selectedOption == 'water'" class="ion-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+            <ion-segment-button value="newEntryWater">
+              <ion-label>New Entry</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fetchListWater">
+              <ion-label>Fetch List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="segmentValue == 'newEntryWater'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/watercan.png" alt="water can">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Can
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.water.noOfItems"
+                (ionBlur)="calculateTotal(monthlyExpense.water.noOfItems,monthlyExpense.water.ratePerItem,'water')"
+                placeholder="No of Can">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Rate/Can
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.water.ratePerItem"
+                (ionBlur)="calculateTotal(monthlyExpense.water.noOfItems,monthlyExpense.water.ratePerItem,'water')"
+                placeholder="Rate per can">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.water.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('water');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div *ngIf="segmentValue == 'fetchListWater'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/watercan.png" alt="water can">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('water');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.noOfQuantity}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+
+        <ion-content *ngIf="selectedOption == 'masala'" class="ion-padding">
+          <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+            <ion-segment-button value="newEntryMasala">
+              <ion-label>New Entry</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="fetchListMasala">
+              <ion-label>Fetch List</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+          <div *ngIf="segmentValue == 'newEntryMasala'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/dashboard/masala.png" alt="Masala">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">No of Item's
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.masala.noOfItems"
+            
+                placeholder="No of items">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Rate
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.masala.ratePerItem"
+                (ionBlur)="calculateTotal(monthlyExpense.masala.noOfItems,monthlyExpense.masala.ratePerItem,'masala')"
+                placeholder="Rate">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Total Amt
+              </ion-label>
+              <ion-input color="darkash" type="text" slot="end" [(ngModel)]="monthlyExpense.masala.totalAmt"
+                placeholder="Total Amt">
+              </ion-input>
+            </ion-item>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="save('masala');">Save</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+          <div *ngIf="segmentValue == 'fetchListMasala'">
+            <ion-grid>
+              <ion-row>
+                <ion-col class="center">
+                  <img src="../../assets/images/dashboard/masala.png" alt="Masala">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-item>
+              <ion-label color="darkash" position="" style="font-weight: 700;">Date of Purchase<span
+                  style="color: red">*</span>
+              </ion-label>
+              <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+            </ion-item>
+            <ion-item>
+              <ion-label color="darkash" style="font-weight: 700;">Selected
+                Date </ion-label>
+              <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+              </ion-label>
+            </ion-item>
+
+            <div *ngIf="showPicker == true">
+              <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" presentation="month"
+                [value]="dateValue"> </ion-datetime>
+            </div>
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4"></ion-col>
+                <ion-col size="4">
+                  <ion-button color="darkash" expand="block" (click)="fetch('masala');">Fetch</ion-button>
+                </ion-col>
+                <ion-col size="4"></ion-col>
+              </ion-row>
+            </ion-grid>
+
+
+            <div style="margin-top: 10%;" *ngIf="responseTable && responseTable.length > 0">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Item Per Rate</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of responseTable; let i = index">
+                    <td>{{data.MonthlyExpense.dateOfPurchase}}</td>
+                    <td>{{data.MonthlyExpense.noOfQuantity}}</td>
+                    <td>{{data.MonthlyExpense.ratePerItem}}</td>
+                    <td>{{data.MonthlyExpense.totalAmt}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="responseTable && responseTable.length > 0">
+                <ion-header style="height: 60px;margin-top: 5%;">
+                  <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+                    {{FetchedTotal}}</ion-title>
+                </ion-header>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </div>
+</ion-content>

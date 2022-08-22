@@ -1,0 +1,110 @@
+<ion-header style="top: 8% !important;">
+  <div class="dashboardTitle">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="folder/dashboard"></ion-back-button>
+      <ion-title class="ion-text-center" style="font-weight: 700;left: -20px;position: relative;" color="darkash">{{loginTypes | uppercase}}</ion-title>
+    </ion-buttons>
+  </div>
+</ion-header>
+
+<ion-content class="marginTop">
+  <div *ngIf="loginTypes === 'login'">
+    <ion-item>
+      <ion-label color="darkash" position="floating">Email ID<span style="color: red">*</span></ion-label>
+      <ion-input color="darkash" type="email" [(ngModel)]="loginVariable.email" placeholder="Email ID"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="darkash" position="floating">Password<span style="color: red">*</span></ion-label>
+      <ion-input type="password" color="darkash" [(ngModel)]="loginVariable.password" placeholder="Password"></ion-input>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button color="darkash" expand="block" (click)="loginCheck()">Login</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <p style="text-align: center;">Don't have an account ?
+            <a (click)="loginType('signup')">Sign Up</a>
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="loginTypes === 'signup'">
+    <ion-item>
+      <ion-label color="darkash" position="floating">User Name<span style="color: red">*</span></ion-label>
+      <ion-input color="darkash" type="text" [(ngModel)]="loginVariable.userName" placeholder="User Name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="darkash" position="floating">Email ID<span style="color: red">*</span></ion-label>
+      <ion-input color="darkash" type="email"  [(ngModel)]="loginVariable.emailID" placeholder="Email ID"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="darkash" position="floating">Phone Number<span style="color: red">*</span></ion-label>
+      <ion-input color="darkash" type="number" [(ngModel)]="loginVariable.phoneNumber" placeholder="Phone Number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="darkash" position="floating">Password<span style="color: red">*</span></ion-label>
+      <ion-input type="password" color="darkash" [(ngModel)]="loginVariable.passwords" placeholder="Password"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="darkash" position="floating">Confirm Password<span style="color: red">*</span></ion-label>
+      <ion-input type="password" color="darkash" [(ngModel)]="loginVariable.confirmPasswords" placeholder="Confirm Password"></ion-input>
+    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button color="darkash" expand="block" (click)="signUp()">Sign up</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <p style="text-align: center;">Already have an account ?
+            <a (click)="loginType('login')">login</a>
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+
+  <div *ngIf="loginTypes === 'loggedin'">
+    <ion-grid>
+      <ion-row style="height: 100px;">
+        <ion-col size="4" class="center">
+          <ion-avatar class="ion-margin-start">
+            <img src="../../assets/images/avatar.png" />
+          </ion-avatar>
+        </ion-col>
+        <ion-col size="8">
+          <ion-text color="darkash">
+            <h3 style="text-align: center"><b>{{currentLoggedInUser.userName}}</b></h3>
+          </ion-text>
+          <ion-text color="darkash">
+            <p style="text-align: center"><b style="font-size: 15px;">{{currentLoggedInUser.emailId}}</b></p>
+          </ion-text>
+          <ion-text color="darkash">
+            <p style="text-align: center"><ion-icon name="call"></ion-icon> <b > {{ currentLoggedInUser.phoneNumber}}</b></p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid>
+      <ion-row style="margin-top: 10%;">
+        <ion-col>
+          <ion-button color="darkash" expand="block" (click)="logout()">Logout</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

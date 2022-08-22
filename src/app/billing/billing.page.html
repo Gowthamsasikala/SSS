@@ -1,0 +1,181 @@
+<ion-content>
+  <ion-header color="darkash" style="top: 8% !important;position: relative;">
+    <div class="dashboardTitle">
+      <ion-buttons slot="start" (click)="previous()">
+        <ion-icon name="arrow-back" style="left: 15px;position: relative;"></ion-icon>
+        <ion-title class="ion-text-center" color="darkash">ORDER</ion-title>
+      </ion-buttons>
+    </div>
+  </ion-header>
+  <div class="marginTop">
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="darkash" style="font-weight: 700;">Item Name<span style="color: red">*</span></ion-label>
+          <ion-input color="darkash" type="text" slot="end" id="open-modals" (click)="clearSearchKey()"
+            [(ngModel)]="billing.orderItem" placeholder="Select Item Name"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label color="darkash" style="font-weight: 700;">Quantity<span style="color: red">*</span></ion-label>
+          <ion-select (ionChange)="quantity($event)" [(ngModel)]="billing.orderQuantity" placeholder="Select Quantity">
+            <ion-select-option *ngFor="let data of quantitys;" value="{{data}}">{{data}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <ion-item>
+      <ion-row>
+        <ion-col size="8">
+          <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Item per rate
+          </ion-label>
+        </ion-col>
+        <ion-col size="4">
+          <ion-input color="darkash" type="text" [(ngModel)]="billing.itemPerRate" placeholder="Item Per Rate">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+
+    <ion-item>
+      <ion-row>
+        <ion-col size="8">
+          <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Amount<span
+              style="color: red">*</span></ion-label>
+        </ion-col>
+        <ion-col size="4">
+          <ion-input color="darkash" type="text" [(ngModel)]="billing.orderAmt" placeholder="Total Amout"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="1"></ion-col>
+        <ion-col size="5">
+          <ion-button color="darkash" expand="block" (click)="reset();">Cancel</ion-button>
+        </ion-col>
+        <ion-col size="5">
+          <ion-button color="darkash" expand="block" (click)="addOrderList();">Add</ion-button>
+        </ion-col>
+        <ion-col size="1"></ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+    <div *ngIf="ordersArrayList && ordersArrayList.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of ordersArrayList; let i = index">
+            <td>{{data.itemName}}</td>
+            <td>{{data.itemQuantity}}</td>
+            <td>{{data.itemAmt}}</td>
+            <td>
+              <ion-icon name="trash" (click)="delete(i)"></ion-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="ordersArrayList && ordersArrayList.length > 0">
+      <ion-header style="height: 60px;margin-top: 5%;">
+        <ion-title class="ion-text-center" color="darkash" style="top: 40%;position: relative;">Total :
+          {{this.billing.orderTotalAmt}}</ion-title>
+      </ion-header>
+    </div>
+
+    <ion-grid *ngIf="this.ordersArrayList && this.ordersArrayList.length > 0">
+      <ion-row>
+        <ion-col size="4"></ion-col>
+        <ion-col size="4">
+          <ion-button color="darkash" expand="block" (click)="save();">Save</ion-button>
+        </ion-col>
+        <ion-col size="4"></ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+          <ion-button color="darkash" expand="block" (click)="fetchLastRecord();">Previous Bill's</ion-button>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-accordion-group *ngIf="lastInsertedRecord && lastInsertedRecord.length>0">
+      <ion-accordion value="{{i}}" *ngFor="let list of lastInsertedRecord;let i = index">
+        <ion-item slot="header" color="darkash">
+          <ion-label>{{list['billing']['CREATEDTIME']}}</ion-label>
+        </ion-item>
+          <div class="ion-padding" slot="content">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Quantity</th>
+                  <th>Amount</th>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr  *ngFor="let data of list['billing']['orderItems']">
+                  <td>{{data.itemName}}</td>
+                  <td>{{data.itemQuantity}}</td>
+                  <td>{{data.itemAmt}}</td>
+                  
+                </tr>
+              </tbody>
+            </table>
+            <h3 style="font-weight: 700;text-align: center;">Total - <b>{{list['billing']['orderTotalAmt']}}</b></h3>
+          </div>
+      </ion-accordion>
+    </ion-accordion-group>
+
+
+
+    <ion-modal #modal trigger="open-modals" [canDismiss]="canDismiss" [presentingElement]="presentingElement">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar color="darkash">
+            <ion-title>Item Name</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="modal.dismiss()">Done</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <p class="ion-padding-horizontal">Enter the item which you are going to add to list.</p>
+          <ion-toolbar>
+            <ion-searchbar animated (ionChange)="searchKeyword(searchKey);" [(ngModel)]="searchKey"></ion-searchbar>
+          </ion-toolbar>
+          <ion-list>
+            <ion-radio-group>
+              <ion-item *ngFor="let datas of newItemArray;let y = index;" (click)="onTermsChanged(datas)">
+                <ion-label>{{datas.itemName}}</ion-label>
+                <ion-radio slot="end" color="darkash" value="{{datas.itemName}}"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+  </div>
+</ion-content>

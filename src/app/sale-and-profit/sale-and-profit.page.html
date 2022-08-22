@@ -1,0 +1,202 @@
+<ion-content>
+  <ion-header color="darkash" style="top: 8% !important;position: relative;" translucent>
+    <div class="dashboardTitle">
+      <ion-buttons slot="start" (click)="previous()">
+        <ion-icon name="arrow-back" style="left: 15px;position: relative;"></ion-icon>
+        <ion-title class="ion-text-center" color="darkash">SALE'S & PROFIT</ion-title>
+      </ion-buttons>
+    </div>
+  </ion-header>
+  <div class="marginTop">
+    <ion-segment (ionChange)="segmentChanged($event)" color="darkash" [(ngModel)]="segmentValue">
+      <ion-segment-button value="newEntry">
+        <ion-label>New Entry</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="fetchList">
+        <ion-label>Fetch List</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <div *ngIf="segmentValue == 'newEntry'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div class="center">
+              <img src="../../assets/images/cash-payment.png" alt="cash" class="imgStyle">
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-item>
+        <ion-label color="darkash" position="" style="font-weight: 700;">Date of Sale<span style="color: red">*</span>
+        </ion-label>
+        <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label color="darkash" style="font-weight: 700;">Selected
+          Date </ion-label>
+        <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+        </ion-label>
+      </ion-item>
+
+      <div *ngIf="showPicker == true">
+        <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+      </div>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Cash<span
+            style="color: red">*</span>
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.cash" placeholder="Cash">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Paytm
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.paytm" placeholder="Paytm">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Phone Pay
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.phonepay" placeholder="PhonePay">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Card
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.card" placeholder="Card">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Today Expense
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.expense" placeholder="Today Expenses">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="darkash" position="fixed" style="font-weight: 700;margin-top: 8px;">Profit<span
+            style="color: red">*</span>
+        </ion-label>
+        <ion-input color="darkash" type="text" slot="end" [(ngModel)]="sales.profit" placeholder="Profit">
+        </ion-input>
+      </ion-item>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4"></ion-col>
+          <ion-col size="4">
+            <ion-button color="darkash" expand="block" (click)="save();">Save</ion-button>
+          </ion-col>
+          <ion-col size="4"></ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </div>
+    <div *ngIf="segmentValue == 'fetchList'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div class="center">
+              <img src="../../assets/images/financial-profit.png" alt="list" class="imgStyle">
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-item>
+        <ion-label color="darkash" position="" style="font-weight: 700;">Date <span style="color: red">*</span>
+        </ion-label>
+        <ion-icon name="calendar" color="orange" slot="end" (click)="showPicker = !showPicker"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label color="darkash" style="font-weight: 700;">Selected
+          Date </ion-label>
+        <ion-label color="darkash" class="ion-text-center" style="font-weight: 700;">{{selectedName}}
+        </ion-label>
+      </ion-item>
+
+      <div *ngIf="showPicker == true">
+        <ion-datetime #dateTime (ionChange)="dateChanged(dateTime.value)" [value]="dateValue"> </ion-datetime>
+      </div>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="4"></ion-col>
+          <ion-col size="4">
+            <ion-button color="darkash" expand="block" (click)="fetch();">Fetch</ion-button>
+          </ion-col>
+          <ion-col size="4"></ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-grid *ngIf="dailyProfitResponse">
+        <ion-row>
+          <ion-col size="12">
+            <div class="boxTable">
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/calendar.png" class="iconStyle" alt="date">
+                </ion-col>
+                <ion-col size="6">
+                  <h3 style="color:#34495E;">{{dailyProfitResponse['dateOfSale']}}</h3>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/money.png" class="iconStyle" alt="cash">
+                </ion-col>
+                <ion-col size="6" class="center">
+                  <h3 style="color:#34495E;">{{dailyProfitResponse['cash']}}</h3>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/mobile-payment.png" class="iconStyle" alt="online">
+                </ion-col>
+                <ion-col size="6" class="center">
+                  <h3 style="color:#34495E;">{{ onlinePayment}}</h3>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/debit-card.png" class="iconStyle" alt="debit">
+                </ion-col>
+                <ion-col size="6" class="center">
+                  <h3 style="color:#34495E;">{{dailyProfitResponse['card'] == null ? 0 : dailyProfitResponse['card']}}</h3>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/expenses.png" class="iconStyle" alt="expense">
+                </ion-col>
+                <ion-col size="6" class="center">
+                  <h3 style="color:#34495E;">{{dailyProfitResponse['expense'] == null ? 0 : dailyProfitResponse['expense'] }}</h3>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col size="6" class="center">
+                  <img src="../../assets/images/profits.png" class="iconStyle" alt="profit">
+                </ion-col>
+                <ion-col size="6" class="center">
+                  <h3 style="color:#34495E;">{{dailyProfitResponse['profit']}}</h3>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </div>
+  </div>
+</ion-content>
